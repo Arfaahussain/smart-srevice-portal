@@ -24,8 +24,10 @@ export default function Login() {
 
       router.push("/requests");
 
-    } catch {
-      alert("Invalid Credentials");
+    } catch (err) {
+      const message =
+        err?.response?.data || "Invalid credentials. Please try again.";
+      alert(message);
     }
   };
 
@@ -33,7 +35,7 @@ export default function Login() {
     <div className="container">
       <div className="card auth-card">
         <h2 className="section-title">Login</h2>
-        <p className="muted">Admin access only.</p>
+        <p className="muted">Sign in to continue.</p>
         <label htmlFor="email">Email</label>
         <input
           id="email"

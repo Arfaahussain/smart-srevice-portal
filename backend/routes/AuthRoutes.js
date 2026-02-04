@@ -6,52 +6,90 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// REGISTER (for testing)
+/* =========================================
+   REGISTER (TEST ONLY)
+========================================= */
 router.post("/register", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-  const { name, email, password } = req.body;
+    // Basic validation
+    if (!name || !email || !password) {
+      return res.status(400).json("All fields required");
+    }
 
-  const hashed = await bcrypt.hash(password, 10);
+    // Check existing user
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json("Email already registered");
+    }
 
-  const user = new User({
-    name,
-    email,
-    password: hashed
-  });
+    const hashed = await bcrypt.hash(password, 10);
 
-  await user.save();
+    const user = new User({
+      name,
+      email,
+      password: hashed,
+      role: "user"        // default
+    });
 
-  res.json("User Created");
+    await user.save();
+
+    res.status(201).json("User Created");
+
+  } catch (err) {
+    res.status(500).json("Registration failed");
+  }
 });
 
-// LOGIN
+/* =========================================
+   LOGIN  (ADMIN ONLY)
+========================================= */
 router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json("Email & password required");
+    }
 
-  const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-  if (!user) {
-    return res.status(400).json("User not found");
+    if (!user) {
+      return res.status(401).json("Invalid credentials");
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      return res.status(401).json("Invalid credentials");
+    }
+
+    // 👉 ADMIN CHECK
+    if (user.role !== "admin") {
+      return res.status(403).json("Admin access required");
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role
+      },
+      "secret123",
+      { expiresIn: "8h" }
+    );
+
+    res.json({
+      token,
+      role: user.role,
+      email: user.email,
+      name: user.name
+    });
+
+  } catch (err) {
+    res.status(500).json("Login failed");
   }
-
-  const valid = await bcrypt.compare(password, user.password);
-
-  if (!valid) {
-    return res.status(400).json("Wrong password");
-  }
-
-  if (user.role !== "admin") {
-    return res.status(403).json("Admin access only");
-  }
-
-  const token = jwt.sign(
-    { id: user._id, email: user.email, role: user.role },
-    "secret123"
-  );
-
-  res.json({ token, role: user.role });
-
 });
 
 export default router;
