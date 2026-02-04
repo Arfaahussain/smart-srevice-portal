@@ -1,0 +1,3 @@
+{
+  "/api/requests/delete/[id]": "pages/api/requests/delete/[id].js"
+}

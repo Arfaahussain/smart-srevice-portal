@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///E:/dev/ntt/smart-service-portal/frontend/pages/index.js"],"sourcesContent":["export default function Home() {\n  return (\n    <div className=\"container\">\n      <div className=\"card auth-card\">\n        <h2 className=\"section-title\">Smart Service Portal</h2>\n        <p className=\"muted\">\n          Students and employees can submit a request without logging in.\n        </p>\n        <div className=\"nav\" style={{ justifyContent: \"center\" }}>\n          <a className=\"btn\" href=\"/create\">Make a Request</a>\n          <a className=\"btn-secondary\" href=\"/login\">Admin Login</a>\n        </div>\n      </div>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,qKAAC;QAAI,WAAU;kBACb,cAAA,qKAAC;YAAI,WAAU;;8BACb,qKAAC;oBAAG,WAAU;8BAAgB;;;;;;8BAC9B,qKAAC;oBAAE,WAAU;8BAAQ;;;;;;8BAGrB,qKAAC;oBAAI,WAAU;oBAAM,OAAO;wBAAE,gBAAgB;oBAAS;;sCACrD,qKAAC;4BAAE,WAAU;4BAAM,MAAK;sCAAU;;;;;;sCAClC,qKAAC;4BAAE,WAAU;4BAAgB,MAAK;sCAAS;;;;;;;;;;;;;;;;;;;;;;;AAKrD"}}]
+}
